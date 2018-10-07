@@ -26,10 +26,10 @@ app.use(bodyParser.urlencoded({
  
 // connection configurations
 var mc = mysql.createConnection({
-    host: 'mysqlinstance.cjm8qag6rwgx.us-east-1.rds.amazonaws.com',
-    user: 'mydb',
-    password: '9542582841',
-    database: 'pluralsight'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
 });
  
 // connect to database
