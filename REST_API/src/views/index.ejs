@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<script>
+function calcSimilarity(){
+    var userID = document.getElementById("user_id").value;
+    dataVal = new Array();
+    $.getJSON("http://usersimilarity-env.e3mjkgkccr.us-east-1.elasticbeanstalk.com/user/"+userID,function(data){
+        $.each(data, function(key, value){
+            console.log(value)
+                 dataVal.push({ y: value["score"], label: value["other_id"]});
+            });
+            if(dataVal.length>0){
+                chart.render();
+            }else{
+                console.log("I am null i dont have any results")
+                document.getElementById('emptyVal').innerHTML = "Please Enter user id between 1 and 10000."
+            }
+
+            
+    });
+    	
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	
+	title:{
+		text:"Similar Users for "+userID+" in the bar chart"
+	},
+	axisX:{
+        interval: 1,
+        title:"User Handle ID"
+	},
+	axisY2:{
+		interlacedColor: "rgba(1,77,101,.2)",
+		gridColor: "rgba(1,77,101,.1)",
+		title: "Similarity Score"
+	},
+	data: [{
+		type: "bar",
+		name: "companies",
+		axisYType: "secondary",
+		color: "#014D65",
+		dataPoints: dataVal
+	}]
+});
+}
+</script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+<body>
+<div class="jumbotron">
+    <center>
+        <h1>Pluralsight</h1>      
+        <p>A REST API for finding similarity between users</p>
+    </center>
+</div>
+ 
+<center>
+<p>Please enter the User ID between 1 and 10000</p>
+<p>User ID: <input type="number" id="user_id"><br></p>
+<button onclick="calcSimilarity()">Submit</button>
+<p id="emptyVal"></p>
+<div id="chartContainer" style="height: 500px; width: 70%;"></div>
+<!-- Footer -->
+<br>
+<br>
+<footer class="page-footer font-small blue">
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2018 Copyright:
+          <a href="https://www.linkedin.com/in/ruppala/"> Rohith Kumar Uppala</a>
+        </div>
+        <!-- Copyright -->
+      
+      </footer>
+      <!-- Footer -->
+
+</center>
+
+
+</body>
